@@ -8,10 +8,13 @@ public class player : MonoBehaviour
     [SerializeField] Transform parent;
     [SerializeField] Transform bulletParent;
     [SerializeField] Animator animator;
+    [SerializeField] GameObject itemBox;
     public float fireDelayTime;
     private float fireTimer;
     bool isAiming = false;
     bool isRun = false;
+    //public bool isPick = false;
+    [HideInInspector] public List<itemBox> item = new List<itemBox>();
     // Start is called before the first frame update
     void Start()
     {
@@ -94,6 +97,14 @@ public class player : MonoBehaviour
         {
             animator.SetTrigger("Roll");
         }
+        if (Input.GetKeyUp(KeyCode.F))
+        {
+            animator.SetTrigger("Pickup");
+        }
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            animator.SetTrigger("Reloading");
+        }
 
 
         //마우스의 스크린 좌표를 월드 좌표로 변환
@@ -110,5 +121,31 @@ public class player : MonoBehaviour
             transform.LookAt(lookPosition);
         }
         
+    }
+    public void FootStep()
+    {
+
+    }
+    public void EndPickup()
+    {
+        if (item.Count == 0)
+            return;
+
+        Destroy(item[0].gameObject);
+        item.RemoveAt(0);
+    }
+    public void RemoveItem(itemBox items)
+    {
+        if(item.Contains(items))
+        {
+            foreach (var tem in item)
+            {
+                if(items == tem)
+                {
+                    item.Remove(items);
+                    break;
+                }
+            }
+        }
     }
 }
